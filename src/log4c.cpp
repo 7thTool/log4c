@@ -51,7 +51,7 @@ protected:
     {
         assert(!fp_[level]);
         std::string filename = GetFileName(level, date);
-        fp_[level] = fopen(filename.c_str(), flags_&LOG4C_FLAG_FILE_APPEND?"at":"wt");
+        fp_[level] = fopen(filename.c_str(), flags_&LOG4C_FLAG_FILE_OVERWRITE?"wt":"at");
         if(fp_[level]) {
             LOG4P("LOG4C open %s success!\n", filename.c_str());
         } else {

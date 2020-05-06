@@ -16,7 +16,7 @@ extern "C" {
 enum LOG4C_FLAG {
     LOG4C_FLAG_DEFAULT = 0,
     LOG4C_FLAG_FILE_LEVEL = 0x01, //日志分级输出到对应Level文件, 否则日志输出到一个文件
-    LOG4C_FLAG_FILE_APPEND = 0x02, //追加写日志，否则覆盖写日志
+    LOG4C_FLAG_FILE_OVERWRITE = 0x02, //覆盖写日志，否则追加写日志
 };
 
 enum LOG4C_LEVEL {
@@ -40,7 +40,7 @@ const char * LOG4C_FormatCurTime(char* buf, int len, const char* format);
 
 FILE* LOG4C_GetFile(int level);
 
-#define LOG4P(format,...) printf("%s "format"\n", __FUNCTION__, ##__VA_ARGS__)
+#define LOG4P(format,...) printf("%s " format "\n", __FUNCTION__, ##__VA_ARGS__)
 
 #define LOG4C(level,format, ...) \
     do { \
@@ -49,17 +49,17 @@ FILE* LOG4C_GetFile(int level);
             FILE* fp = LOG4C_GetFile(level); \
             if (fp) { \
                 char time[64] = {0}; \
-                fprintf(fp, "%s "format"\n", LOG4C_FormatCurTime(time,sizeof(time)-1,"%Y-%m-%d %H:%M:%S"), ##__VA_ARGS__); \
+                fprintf(fp, "%s " format "\n", LOG4C_FormatCurTime(time,sizeof(time)-1,"%Y-%m-%d %H:%M:%S"), ##__VA_ARGS__); \
                 fflush(fp); \
             } \
         } \
         LOG4C_UnLock(); \
     } while(0)
 
-#define LOG4E(format,...) LOG4C(LOG4C_ERROR, "[ERROR] [%s:%d] "format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define LOG4W(format,...) LOG4C(LOG4C_WARN, "[WARN] "format, ##__VA_ARGS__)
-#define LOG4I(format,...) LOG4C(LOG4C_INFO, "[INFO] "format, ##__VA_ARGS__)
-#define LOG4D(format,...) LOG4C(LOG4C_DEBUG, "[DEBUG] [%s] "format, __FUNCTION__, ##__VA_ARGS__)
+#define LOG4E(format,...) LOG4C(LOG4C_ERROR, "[ERROR] [%s:%d] " format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define LOG4W(format,...) LOG4C(LOG4C_WARN, "[WARN] " format, ##__VA_ARGS__)
+#define LOG4I(format,...) LOG4C(LOG4C_INFO, "[INFO] " format, ##__VA_ARGS__)
+#define LOG4D(format,...) LOG4C(LOG4C_DEBUG, "[DEBUG] [%s] " format, __FUNCTION__, ##__VA_ARGS__)
 
 #if defined(__cplusplus)
 }
